@@ -499,6 +499,18 @@ impl RetroRuntime {
     let id = btn.into();
     unsafe { cb(port, device, index, id) != 0 }
   }
+
+  /// Returns true if the specified key is pressed, false otherwise.
+  pub fn is_keyboard_key_pressed(&self, port: RetroDevicePort, id: u32) -> bool {
+    let cb = self
+      .input_state
+      .expect("`is_keyboard_key_pressed` called without registering an `input_state` callback");
+
+    let port = libc::c_uint::from(port.into_inner());
+    let device = RETRO_DEVICE_KEYBOARD;
+    let index = 0;
+    unsafe { cb(port, device, index, id) != 0 }
+  }
 }
 
 pub struct RetroSystemInfo {
